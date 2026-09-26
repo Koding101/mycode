@@ -6,6 +6,8 @@
 - кратные 15 — на "FizzBuzz".
 """
 
+import argparse
+
 
 def fizzbuzz(n):
     """Возвращает список строк FizzBuzz для чисел от 1 до n."""
@@ -24,7 +26,20 @@ def fizzbuzz(n):
     return result
 
 
+def positive_int(value):
+    try:
+        number = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("N must be a positive integer") from exc
+    if number < 1:
+        raise argparse.ArgumentTypeError("N must be a positive integer")
+    return number
+
+
 if __name__ == "__main__":
-    # Печатаем результат для n = 15 построчно
-    for line in fizzbuzz(15):
+    parser = argparse.ArgumentParser(description="Print FizzBuzz for numbers from 1 to N.")
+    parser.add_argument("N", nargs="?", type=positive_int, default=15,
+                        help="positive upper bound (default: 15)")
+    args = parser.parse_args()
+    for line in fizzbuzz(args.N):
         print(line)
